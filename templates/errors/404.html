@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Page non trouvée - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center">
+            <h1 class="display-1 text-muted">404</h1>
+            <h2 class="mb-4">Page non trouvée</h2>
+            <p class="lead mb-4">Désolé, la page que vous recherchez n'existe pas ou a été déplacée.</p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">
+                    <i class="fas fa-home me-2"></i>Retour à l'accueil
+                </a>
+                <a href="{{ url_for('vehicles.index') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-car me-2"></i>Voir nos véhicules
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

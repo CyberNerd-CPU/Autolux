@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Conditions d'utilisation - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <h1 class="mb-4">Conditions d'utilisation</h1>
+            
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">1. Acceptation des conditions</h2>
+                    <p>
+                        En accédant et en utilisant le site web de LuxeAuto, vous acceptez d'être lié par les présentes conditions d'utilisation. Si vous n'acceptez pas ces conditions, veuillez ne pas utiliser notre site.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">2. Conditions de location</h2>
+                    <h3 class="h5 mb-2">2.1 Âge minimum</h3>
+                    <p class="mb-3">
+                        Le conducteur doit être âgé d'au moins 25 ans et posséder un permis de conduire valide depuis au moins 3 ans.
+                    </p>
+
+                    <h3 class="h5 mb-2">2.2 Documents requis</h3>
+                    <ul class="mb-3">
+                        <li>Permis de conduire valide</li>
+                        <li>Carte d'identité ou passeport</li>
+                        <li>Justificatif de domicile de moins de 3 mois</li>
+                        <li>Carte bancaire au nom du conducteur</li>
+                    </ul>
+
+                    <h3 class="h5 mb-2">2.3 Assurance</h3>
+                    <p class="mb-3">
+                        Tous nos véhicules sont assurés tous risques avec une franchise variable selon la catégorie du véhicule. Des options de réduction de franchise sont disponibles.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">3. Réservations et paiements</h2>
+                    <h3 class="h5 mb-2">3.1 Réservation</h3>
+                    <p class="mb-3">
+                        Les réservations peuvent être effectuées en ligne ou par téléphone. Une caution sera demandée au moment de la prise en charge du véhicule.
+                    </p>
+
+                    <h3 class="h5 mb-2">3.2 Paiement</h3>
+                    <p class="mb-3">
+                        Le paiement s'effectue au moment de la réservation. Nous acceptons les cartes bancaires principales et les virements bancaires.
+                    </p>
+
+                    <h3 class="h5 mb-2">3.3 Annulation</h3>
+                    <p class="mb-3">
+                        Les annulations sont acceptées jusqu'à 24h avant la date de début de location. Au-delà, des frais d'annulation pourront être appliqués.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">4. Utilisation du véhicule</h2>
+                    <h3 class="h5 mb-2">4.1 Restrictions</h3>
+                    <p class="mb-3">
+                        Le véhicule ne doit pas être utilisé pour :
+                    </p>
+                    <ul class="mb-3">
+                        <li>Le transport de passagers payants</li>
+                        <li>La participation à des compétitions</li>
+                        <li>Le remorquage d'autres véhicules</li>
+                        <li>Le transport de marchandises dangereuses</li>
+                    </ul>
+
+                    <h3 class="h5 mb-2">4.2 Entretien</h3>
+                    <p class="mb-3">
+                        Le client doit maintenir le véhicule en bon état et signaler immédiatement tout problème mécanique.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">5. Protection des données personnelles</h2>
+                    <p class="mb-3">
+                        Nous collectons et traitons vos données personnelles conformément à notre politique de confidentialité. Ces données sont utilisées uniquement dans le cadre de la location de véhicules.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">6. Contact</h2>
+                    <p>
+                        Pour toute question concernant ces conditions d'utilisation, veuillez nous contacter à :
+                        <br>
+                        <strong>Email :</strong> legal@luxeauto.com
+                        <br>
+                        <strong>Téléphone :</strong> +33 1 23 45 67 89
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <p class="text-muted">
+                    Dernière mise à jour : {{ now.strftime('%d/%m/%Y') }}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

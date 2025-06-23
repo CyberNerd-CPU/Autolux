@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}À propos - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- En-tête -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 mb-3">À propos de LuxeAuto</h1>
+            <p class="lead text-muted">Votre partenaire de confiance pour la location de véhicules de luxe</p>
+        </div>
+    </div>
+
+    <!-- Notre histoire -->
+    <div class="row mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0">
+            <img src="{{ url_for('static', filename='images/about-hero.jpg') }}" alt="Notre histoire" class="img-fluid rounded shadow">
+        </div>
+        <div class="col-lg-6">
+            <h2 class="mb-4">Notre Histoire</h2>
+            <p class="mb-4">
+                Fondée en 2010, LuxeAuto est née de la passion pour l'automobile et du désir d'offrir une expérience de location de véhicules de luxe exceptionnelle. Notre fondateur, passionné d'automobiles depuis son plus jeune âge, a créé LuxeAuto avec une vision claire : rendre accessible l'expérience de conduite de véhicules de prestige tout en garantissant un service irréprochable.
+            </p>
+            <p class="mb-4">
+                Au fil des années, nous avons construit une flotte impressionnante de véhicules de luxe, sélectionnés avec soin pour leur performance, leur confort et leur exclusivité. Notre engagement envers l'excellence nous a permis de devenir un acteur majeur dans le domaine de la location de véhicules de luxe en France.
+            </p>
+            <p>
+                Aujourd'hui, LuxeAuto continue d'évoluer et d'innover, toujours dans le respect de ses valeurs fondamentales et de sa mission : offrir une expérience de location inoubliable à chaque client.
+            </p>
+        </div>
+    </div>
+
+    <!-- Nos valeurs -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2>Nos Valeurs</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-star text-primary fa-3x mb-3"></i>
+                    <h3 class="h4 mb-3">Excellence</h3>
+                    <p class="text-muted">
+                        Nous nous engageons à offrir un service irréprochable et à maintenir les plus hauts standards de qualité dans tous les aspects de notre activité.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-handshake text-primary fa-3x mb-3"></i>
+                    <h3 class="h4 mb-3">Confiance</h3>
+                    <p class="text-muted">
+                        La confiance de nos clients est notre bien le plus précieux. Nous construisons des relations durables basées sur la transparence et l'intégrité.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <i class="fas fa-heart text-primary fa-3x mb-3"></i>
+                    <h3 class="h4 mb-3">Passion</h3>
+                    <p class="text-muted">
+                        Notre passion pour l'automobile nous pousse à toujours chercher l'excellence et à offrir une expérience unique à nos clients.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notre équipe -->
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h2>Notre Équipe</h2>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/team-1.jpg') }}" class="card-img-top" alt="Directeur">
+                <div class="card-body text-center">
+                    <h3 class="h5 mb-2">Jean Dupont</h3>
+                    <p class="text-muted mb-3">Directeur Général</p>
+                    <p class="small text-muted">
+                        Plus de 20 ans d'expérience dans l'industrie automobile de luxe.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/team-2.jpg') }}" class="card-img-top" alt="Responsable Service Client">
+                <div class="card-body text-center">
+                    <h3 class="h5 mb-2">Marie Laurent</h3>
+                    <p class="text-muted mb-3">Responsable Service Client</p>
+                    <p class="small text-muted">
+                        Expertise en service client et satisfaction client.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm">
+                <img src="{{ url_for('static', filename='images/team-3.jpg') }}" class="card-img-top" alt="Responsable Flotte">
+                <div class="card-body text-center">
+                    <h3 class="h5 mb-2">Pierre Martin</h3>
+                    <p class="text-muted mb-3">Responsable Flotte</p>
+                    <p class="small text-muted">
+                        Expert en véhicules de luxe et maintenance.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

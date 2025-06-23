@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Détails de la réservation - Administration{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Détails de la réservation #{{ reservation.id }}</h1>
+                <a href="{{ url_for('admin.reservations') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour
+                </a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Informations client</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">Nom</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_user.nom }}</dd>
+
+                                <dt class="col-sm-4">Email</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_user.email }}</dd>
+
+                                <dt class="col-sm-4">Téléphone</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_user.telephone or 'Non renseigné' }}</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Informations véhicule</h5>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">Marque</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_vehicle.marque }}</dd>
+
+                                <dt class="col-sm-4">Modèle</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_vehicle.modele }}</dd>
+
+                                <dt class="col-sm-4">Année</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_vehicle.annee }}</dd>
+
+                                <dt class="col-sm-4">Prix journalier</dt>
+                                <dd class="col-sm-8">{{ reservation.reservation_vehicle.prix_journalier }}€</dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Détails de la réservation</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Date de début</dt>
+                        <dd class="col-sm-9">{{ reservation.date_debut.strftime('%d/%m/%Y') }}</dd>
+
+                        <dt class="col-sm-3">Date de fin</dt>
+                        <dd class="col-sm-9">{{ reservation.date_fin.strftime('%d/%m/%Y') }}</dd>
+
+                        <dt class="col-sm-3">Durée</dt>
+                        <dd class="col-sm-9">{{ (reservation.date_fin - reservation.date_debut).days }} jours</dd>
+
+                        <dt class="col-sm-3">Prix total</dt>
+                        <dd class="col-sm-9">{{ reservation.calculate_total_price() }}€</dd>
+
+                        <dt class="col-sm-3">Statut</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge {% if reservation.statut == 'confirmee' %}bg-success
+                                          {% elif reservation.statut == 'en_attente' %}bg-warning
+                                          {% else %}bg-danger{% endif %}">
+                                {{ reservation.statut|replace('_', ' ')|title }}
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#statusModal">
+                        <i class="fas fa-edit"></i> Changer le statut
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal pour changer le statut -->
+            <div class="modal fade" id="statusModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Changer le statut</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <form action="{{ url_for('admin.update_reservation_status', id=reservation.id) }}" method="POST">
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Nouveau statut</label>
+                                    <select class="form-select" id="status" name="status" required>
+                                        <option value="en_attente" {% if reservation.statut == 'en_attente' %}selected{% endif %}>En attente</option>
+                                        <option value="confirmee" {% if reservation.statut == 'confirmee' %}selected{% endif %}>Confirmée</option>
+                                        <option value="annulee" {% if reservation.statut == 'annulee' %}selected{% endif %}>Annulée</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

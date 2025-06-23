@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter un véhicule - Administration{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Ajouter un véhicule</h1>
+                <a href="{{ url_for('admin.vehicles') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Retour
+                </a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="marque" class="form-label">Marque</label>
+                                    <input type="text" class="form-control" id="marque" name="marque" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="modele" class="form-label">Modèle</label>
+                                    <input type="text" class="form-control" id="modele" name="modele" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="annee" class="form-label">Année</label>
+                                    <input type="number" class="form-control" id="annee" name="annee" min="1900" max="{{ now.year }}" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="prix_journalier" class="form-label">Prix journalier (€)</label>
+                                    <input type="number" class="form-control" id="prix_journalier" name="prix_journalier" min="0" step="0.01" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="statut" class="form-label">Statut</label>
+                                    <select class="form-select" id="statut" name="statut" required>
+                                        <option value="disponible">Disponible</option>
+                                        <option value="reserve">Réservé</option>
+                                        <option value="vendu">Vendu</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="images" class="form-label">Images</label>
+                                    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+                                    <div class="form-text">Vous pouvez sélectionner plusieurs images</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Ajouter le véhicule
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

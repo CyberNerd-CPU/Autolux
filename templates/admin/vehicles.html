@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Gestion des véhicules - Administration{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Gestion des véhicules</h1>
+                <a href="{{ url_for('admin.new_vehicle') }}" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>Ajouter un véhicule
+                </a>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <div class="card shadow mb-4">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Image</th>
+                                    <th>Marque</th>
+                                    <th>Modèle</th>
+                                    <th>Année</th>
+                                    <th>Prix/jour</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vehicle in vehicles %}
+                                <tr>
+                                    <td>{{ vehicle.id }}</td>
+                                    <td>
+                                        {% if vehicle.images and vehicle.images|length > 0 %}
+                                            <img src="{{ url_for('uploaded_file', filename=vehicle.images[0].filename) }}" 
+                                                 alt="{{ vehicle.marque }} {{ vehicle.modele }}"
+                                                 class="img-thumbnail"
+                                                 style="max-width: 100px;">
+                                        {% else %}
+                                            <div class="bg-light text-center p-2" style="width: 100px; height: 75px;">
+                                                <i class="fas fa-car fa-2x text-muted"></i>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ vehicle.marque }}</td>
+                                    <td>{{ vehicle.modele }}</td>
+                                    <td>{{ vehicle.annee }}</td>
+                                    <td>{{ "%.2f"|format(vehicle.prix_journalier) }} €</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if vehicle.statut == 'disponible' else 'warning' if vehicle.statut == 'reserve' else 'danger' }}">
+                                            {{ vehicle.statut }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ url_for('admin.edit_vehicle', id=vehicle.id) }}" 
+                                               class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-danger" 
+                                                    data-bs-toggle="modal" 
+                                                    data-bs-target="#deleteModal{{ vehicle.id }}">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal de confirmation de suppression -->
+                                        <div class="modal fade" id="deleteModal{{ vehicle.id }}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Confirmer la suppression</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Êtes-vous sûr de vouloir supprimer le véhicule {{ vehicle.marque }} {{ vehicle.modele }} ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                                        <form action="{{ url_for('admin.delete_vehicle', id=vehicle.id) }}" method="POST" class="d-inline">
+                                                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vehicle.marque }} {{ vehicle.modele }} - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">Accueil</a></li>
+            <li class="breadcrumb-item"><a href="{{ url_for('vehicles.index') }}">Véhicules</a></li>
+            <li class="breadcrumb-item active">{{ vehicle.marque }} {{ vehicle.modele }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Galerie d'images -->
+        <div class="col-lg-8">
+            <div id="vehicleCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div class="carousel-inner rounded shadow">
+                    {% for image in vehicle.images %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ image.url }}" class="d-block w-100" alt="{{ vehicle.marque }} {{ vehicle.modele }}" style="height: 400px; object-fit: cover;">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if vehicle.images|length > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+                {% endif %}
+            </div>
+
+            <!-- Informations détaillées -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">{{ vehicle.marque }} {{ vehicle.modele }}</h2>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Caractéristiques principales</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-calendar me-2 text-primary"></i>
+                                    Année : {{ vehicle.annee }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-gas-pump me-2 text-primary"></i>
+                                    Carburant : {{ vehicle.carburant }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-cog me-2 text-primary"></i>
+                                    Transmission : {{ vehicle.transmission }}
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-tachometer-alt me-2 text-primary"></i>
+                                    Kilométrage : {{ vehicle.kilometrage }} km
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Équipements</h5>
+                            <ul class="list-unstyled">
+                                {% for equipement in vehicle.equipements %}
+                                <li class="mb-2">
+                                    <i class="fas fa-check me-2 text-success"></i>
+                                    {{ equipement }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3">Description</h5>
+                    <p class="card-text">{{ vehicle.description }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulaire de réservation -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm sticky-top" style="top: 2rem;">
+                <div class="card-body">
+                    <h4 class="card-title mb-4">Réserver ce véhicule</h4>
+                    <div class="mb-4">
+                        <h3 class="text-primary mb-0">{{ vehicle.prix_jour }}€</h3>
+                        <small class="text-muted">par jour</small>
+                    </div>
+
+                    <form method="POST" action="{{ url_for('reservations.create', vehicle_id=vehicle.id) }}">
+                        <div class="mb-3">
+                            <label for="date_debut" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="date_debut" name="date_debut" required min="{{ today }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="date_fin" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="date_fin" name="date_fin" required min="{{ today }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="lieu_prise" class="form-label">Lieu de prise en charge</label>
+                            <select class="form-select" id="lieu_prise" name="lieu_prise" required>
+                                <option value="">Sélectionnez un lieu</option>
+                                <option value="agence_paris">Agence Paris</option>
+                                <option value="aeroport_cdg">Aéroport CDG</option>
+                                <option value="aeroport_ory">Aéroport Orly</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="lieu_retour" class="form-label">Lieu de retour</label>
+                            <select class="form-select" id="lieu_retour" name="lieu_retour" required>
+                                <option value="">Sélectionnez un lieu</option>
+                                <option value="agence_paris">Agence Paris</option>
+                                <option value="aeroport_cdg">Aéroport CDG</option>
+                                <option value="aeroport_ory">Aéroport Orly</option>
+                            </select>
+                        </div>
+
+                        <div class="alert alert-info mb-4">
+                            <h6 class="alert-heading mb-2">Prix total estimé</h6>
+                            <div class="d-flex justify-content-between">
+                                <span>Location</span>
+                                <span id="prix_total">0€</span>
+                            </div>
+                        </div>
+
+                        {% if current_user.is_authenticated %}
+                            <button type="submit" class="btn btn-primary w-100" {% if not vehicle.disponible %}disabled{% endif %}>
+                                <i class="fas fa-calendar-check me-2"></i>Réserver maintenant
+                            </button>
+                        {% else %}
+                            <div class="alert alert-warning">
+                                <i class="fas fa-info-circle me-2"></i>
+                                Vous devez être connecté pour réserver.
+                                <a href="{{ url_for('auth.login') }}" class="alert-link">Se connecter</a>
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const dateDebut = document.getElementById('date_debut');
+    const dateFin = document.getElementById('date_fin');
+    const prixTotal = document.getElementById('prix_total');
+    const prixJour = {{ vehicle.prix_jour }};
+
+    function calculerPrixTotal() {
+        if (dateDebut.value && dateFin.value) {
+            const debut = new Date(dateDebut.value);
+            const fin = new Date(dateFin.value);
+            const diffTime = Math.abs(fin - debut);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            const total = diffDays * prixJour;
+            prixTotal.textContent = total + '€';
+        }
+    }
+
+    dateDebut.addEventListener('change', calculerPrixTotal);
+    dateFin.addEventListener('change', calculerPrixTotal);
+});
+</script>
+{% endblock %} 

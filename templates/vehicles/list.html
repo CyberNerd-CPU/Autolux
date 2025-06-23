@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Nos Véhicules - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Notre Collection de Véhicules de Luxe</h1>
+    
+    <!-- Filtres -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label for="marque" class="form-label">Marque</label>
+                    <select class="form-select" id="marque" name="marque">
+                        <option value="">Toutes les marques</option>
+                        {% for marque in marques %}
+                        <option value="{{ marque }}" {% if marque == selected_marque %}selected{% endif %}>{{ marque }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="prix_min" class="form-label">Prix minimum</label>
+                    <input type="number" class="form-control" id="prix_min" name="prix_min" min="0" value="{{ selected_prix_min or '' }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="prix_max" class="form-label">Prix maximum</label>
+                    <input type="number" class="form-control" id="prix_max" name="prix_max" min="0" value="{{ selected_prix_max or '' }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="annee" class="form-label">Année</label>
+                    <select class="form-select" id="annee" name="annee">
+                        <option value="">Toutes les années</option>
+                        {% for annee in annees %}
+                        <option value="{{ annee }}" {% if annee == selected_annee %}selected{% endif %}>{{ annee }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Rechercher
+                    </button>
+                    <a href="{{ url_for('vehicles.index') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo me-2"></i>Réinitialiser
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Liste des véhicules -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for vehicle in vehicles %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                {% if vehicle.images %}
+                <img src="{{ url_for('uploaded_file', filename=vehicle.images[0].filename) }}" class="card-img-top" alt="{{ vehicle.marque }} {{ vehicle.modele }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="fas fa-car fa-3x text-muted"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ vehicle.marque }} {{ vehicle.modele }}</h5>
+                    <p class="card-text text-muted mb-2">Année : {{ vehicle.annee }}</p>
+                    <p class="card-text flex-grow-1">{{ vehicle.description|truncate(100) }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="h5 mb-0">{{ "%.2f"|format(vehicle.prix_journalier) }}€ / jour</span>
+                        <a href="{{ url_for('vehicles.detail', id=vehicle.id) }}" class="btn btn-primary">
+                            <i class="fas fa-info-circle me-2"></i>Détails
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>Aucun véhicule ne correspond à vos critères.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

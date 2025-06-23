@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Nos Véhicules - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Nos Véhicules</h2>
+    
+    <!-- Filtres -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label for="marque" class="form-label">Marque</label>
+                    <input type="text" class="form-control" id="marque" name="marque" value="{{ request.args.get('marque', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="prix_min" class="form-label">Prix minimum</label>
+                    <input type="number" class="form-control" id="prix_min" name="prix_min" value="{{ request.args.get('prix_min', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="prix_max" class="form-label">Prix maximum</label>
+                    <input type="number" class="form-control" id="prix_max" name="prix_max" value="{{ request.args.get('prix_max', '') }}">
+                </div>
+                <div class="col-md-3">
+                    <label for="annee" class="form-label">Année</label>
+                    <input type="number" class="form-control" id="annee" name="annee" value="{{ request.args.get('annee', '') }}">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                    <a href="{{ url_for('main.vehicles') }}" class="btn btn-secondary">Réinitialiser</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Liste des véhicules -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for vehicle in vehicles %}
+        <div class="col">
+            <div class="card h-100">
+                {% if vehicle.images %}
+                <img src="{{ url_for('static', filename='uploads/' + vehicle.images[0].filename) }}" 
+                     class="card-img-top" 
+                     alt="{{ vehicle.marque }} {{ vehicle.modele }}"
+                     style="height: 200px; object-fit: cover;">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/default-car.jpg') }}" 
+                     class="card-img-top" 
+                     alt="Image par défaut"
+                     style="height: 200px; object-fit: cover;">
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ vehicle.marque }} {{ vehicle.modele }}</h5>
+                    <p class="card-text">
+                        <strong>Année:</strong> {{ vehicle.annee }}<br>
+                        <strong>Prix journalier:</strong> {{ vehicle.prix_journalier }}€<br>
+                        <strong>Statut:</strong> 
+                        <span class="badge {% if vehicle.statut == 'disponible' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ vehicle.statut }}
+                        </span>
+                    </p>
+                    <div class="mt-auto">
+                        <a href="{{ url_for('main.vehicle_details', id=vehicle.id) }}" class="btn btn-primary">Voir les détails</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

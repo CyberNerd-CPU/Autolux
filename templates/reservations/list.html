@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Réservations - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Mes Réservations</h1>
+    
+    {% if reservations %}
+    <div class="row">
+        {% for reservation in reservations %}
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ reservation.reservation_vehicle.marque }} {{ reservation.reservation_vehicle.modele }}</h5>
+                    <p class="card-text">
+                        <strong>Dates :</strong> {{ reservation.date_debut.strftime('%d/%m/%Y') }} - {{ reservation.date_fin.strftime('%d/%m/%Y') }}<br>
+                        <strong>Statut :</strong>
+                        <span class="badge {% if reservation.statut == 'en_attente' %}bg-warning{% elif reservation.statut == 'confirmee' %}bg-success{% else %}bg-danger{% endif %}">
+                            {{ reservation.statut|title }}
+                        </span><br>
+                        <strong>Prix total :</strong> {{ (reservation.date_fin - reservation.date_debut).days * reservation.reservation_vehicle.prix_journalier }}€
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('reservations.detail', id=reservation.id) }}" class="btn btn-primary">
+                            <i class="fas fa-info-circle me-2"></i>Détails
+                        </a>
+                        {% if reservation.statut == 'en_attente' %}
+                        <a href="{{ url_for('reservations.cancel', id=reservation.id) }}" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')">
+                            <i class="fas fa-times me-2"></i>Annuler
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle me-2"></i>Vous n'avez aucune réservation.
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

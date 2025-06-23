@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - LuxeAuto{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero bg-dark text-white py-5" style="background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') center/cover;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1 class="display-4 fw-bold mb-4">Location de Véhicules de Luxe</h1>
+                <p class="lead mb-4">Découvrez notre collection exclusive de véhicules haut de gamme pour vos déplacements.</p>
+                <div class="d-flex gap-3">
+                    <a href="{{ url_for('vehicles.index') }}" class="btn btn-primary btn-lg">Voir nos véhicules</a>
+                    {% if current_user.is_authenticated and current_user.role == 'admin' %}
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-tachometer-alt"></i> Tableau de bord
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Vehicles Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Nos Véhicules en Vedette</h2>
+        <div class="row">
+            {% for vehicle in featured_vehicles %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {% if vehicle.images %}
+                    <img src="{{ url_for('uploaded_file', filename=vehicle.images[0].filename) }}" 
+                         class="card-img-top" 
+                         alt="{{ vehicle.marque }} {{ vehicle.modele }}"
+                         style="height: 200px; width: 100%; object-fit: cover; object-position: center;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="fas fa-car fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">{{ vehicle.marque }} {{ vehicle.modele }}</h5>
+                        <p class="card-text flex-grow-1">
+                            <strong>Année:</strong> {{ vehicle.annee }}<br>
+                            <strong>Prix par jour:</strong> {{ "%.2f"|format(vehicle.prix_journalier) }}€
+                        </p>
+                        <div class="mt-auto">
+                            <a href="{{ url_for('vehicles.detail', id=vehicle.id) }}" class="btn btn-primary w-100">
+                                <i class="fas fa-info-circle me-2"></i>Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Nos Services</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-car fa-3x mb-3 text-primary"></i>
+                    <h4>Véhicules de Luxe</h4>
+                    <p>Une sélection exclusive de véhicules haut de gamme.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-shield-alt fa-3x mb-3 text-primary"></i>
+                    <h4>Assurance Premium</h4>
+                    <p>Protection complète pour votre tranquillité d'esprit.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="text-center">
+                    <i class="fas fa-headset fa-3x mb-3 text-primary"></i>
+                    <h4>Support 24/7</h4>
+                    <p>Une équipe dédiée à votre service à tout moment.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="mb-4">Prêt à vivre une expérience unique ?</h2>
+        <p class="lead mb-4">Réservez dès maintenant votre véhicule de luxe.</p>
+        <a href="{{ url_for('vehicles.index') }}" class="btn btn-light btn-lg">Réserver maintenant</a>
+    </div>
+</section>
+{% endblock %} 

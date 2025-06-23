@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vehicle.marque }} {{ vehicle.modele }} - LuxeAuto{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('vehicles.index') }}">Véhicules</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ vehicle.marque }} {{ vehicle.modele }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Images du véhicule -->
+        <div class="col-md-8 mb-4">
+            <div id="vehicleCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div class="carousel-inner rounded shadow">
+                    {% if vehicle.images %}
+                        {% for image in vehicle.images %}
+                        <div class="carousel-item {% if loop.first %}active{% endif %}">
+                            <div class="d-flex justify-content-center align-items-center" style="height: 600px; background-color: #f8f9fa;">
+                                <img src="{{ url_for('uploaded_file', filename=image.filename) }}" 
+                                     class="d-block" 
+                                     alt="{{ vehicle.marque }} {{ vehicle.modele }}" 
+                                     style="max-height: 100%; max-width: 100%; object-fit: contain;">
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="carousel-item active">
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 600px;">
+                                <div class="text-center">
+                                    <i class="fas fa-car fa-5x text-muted mb-3"></i>
+                                    <p class="text-muted">Image non disponible</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if vehicle.images|length > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Précédent</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#vehicleCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Suivant</span>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Informations du véhicule -->
+        <div class="col-md-4">
+            <h1 class="mb-4">{{ vehicle.marque }} {{ vehicle.modele }}</h1>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Caractéristiques</h5>
+                    <ul class="list-unstyled">
+                        <li><strong>Année:</strong> {{ vehicle.annee }}</li>
+                        <li><strong>Prix journalier:</strong> {{ "%.2f"|format(vehicle.prix_journalier) }}€</li>
+                        <li><strong>Statut:</strong> 
+                            <span class="badge {% if vehicle.statut == 'disponible' %}bg-success{% elif vehicle.statut == 'reserve' %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ vehicle.statut|capitalize }}
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Formulaire de réservation -->
+            {% if vehicle.statut == 'disponible' %}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Réserver ce véhicule</h5>
+                    <form method="POST" action="{{ url_for('reservations.create', vehicle_id=vehicle.id) }}">
+                        <div class="mb-3">
+                            <label for="date_debut" class="form-label">Date de début</label>
+                            <input type="date" class="form-control" id="date_debut" name="date_debut" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="date_fin" class="form-label">Date de fin</label>
+                            <input type="date" class="form-control" id="date_fin" name="date_fin" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Réserver</button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="card">
+                <div class="card-body">
+                    <div class="alert alert-warning mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Ce véhicule n'est pas disponible pour le moment.
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Description -->
+    <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+            <h5 class="card-title mb-0">Description</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ vehicle.description or "Aucune description disponible." }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %} 
