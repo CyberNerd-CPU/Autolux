@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, current_app, render_template, abo
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from flask_login import login_required
-from models import db, Vehicle, User, Reservation
+from models import db, Vehicle, VehicleImage, User, Reservation
 from datetime import datetime
 import os
 from werkzeug.utils import secure_filename
@@ -215,9 +215,13 @@ class VehicleList(Resource):
                 description=data.get('description'),
                 prix_journalier=data['prix_journalier'],
                 statut=data.get('statut', 'disponible'),
-                images=data.get('images', [])
             )
             db.session.add(vehicle)
+            db.session.flush()
+
+            for image_url in data.get('images', []):
+                db.session.add(VehicleImage(vehicle_id=vehicle.id, filename=image_url))
+
             db.session.commit()
             return vehicle.to_dict(), 201
         except Exception as e:
@@ -281,8 +285,12 @@ class VehicleResource(Resource):
             vehicle.description = data.get('description', vehicle.description)
             vehicle.prix_journalier = data.get('prix_journalier', vehicle.prix_journalier)
             vehicle.statut = data.get('statut', vehicle.statut)
-            vehicle.images = data.get('images', vehicle.images)
-            
+
+            if 'images' in data:
+                VehicleImage.query.filter_by(vehicle_id=vehicle.id).delete()
+                for image_url in data['images']:
+                    db.session.add(VehicleImage(vehicle_id=vehicle.id, filename=image_url))
+
             db.session.commit()
             return vehicle.to_dict()
         except Exception as e:
