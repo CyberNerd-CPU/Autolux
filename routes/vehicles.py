@@ -82,7 +82,7 @@ vehicle_model = api.model('Vehicle', {
     'description': fields.String(description='Description du véhicule'),
     'prix_journalier': fields.Float(required=True, description='Prix journalier du véhicule'),
     'statut': fields.String(description='Statut du véhicule (disponible, reserve, vendu)'),
-    'images': fields.List(fields.String, description='Liste des images du véhicule'),
+    'images': fields.Raw(description='Liste des images du véhicule (objets {id, filename, url})'),
     'date_ajout': fields.DateTime(readonly=True)
 })
 
