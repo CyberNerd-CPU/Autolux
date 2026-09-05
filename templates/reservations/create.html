@@ -12,7 +12,7 @@
                     <h5 class="card-title">{{ vehicle.marque }} {{ vehicle.modele }}</h5>
                     <p class="card-text">
                         <strong>Année :</strong> {{ vehicle.annee }}<br>
-                        <strong>Prix journalier :</strong> {{ vehicle.prix_journalier }}€<br>
+                        <strong>Prix journalier :</strong> {{ "%.0f"|format(vehicle.prix_journalier) }} FCFA<br>
                         <strong>Description :</strong><br>
                         {{ vehicle.description }}
                     </p>

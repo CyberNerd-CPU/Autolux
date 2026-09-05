@@ -59,7 +59,7 @@
                                 <dd class="col-sm-8">{{ reservation.reservation_vehicle.annee }}</dd>
 
                                 <dt class="col-sm-4">Prix journalier</dt>
-                                <dd class="col-sm-8">{{ reservation.reservation_vehicle.prix_journalier }}€</dd>
+                                <dd class="col-sm-8">{{ "%.0f"|format(reservation.reservation_vehicle.prix_journalier) }} FCFA</dd>
                             </dl>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                         <dd class="col-sm-9">{{ (reservation.date_fin - reservation.date_debut).days }} jours</dd>
 
                         <dt class="col-sm-3">Prix total</dt>
-                        <dd class="col-sm-9">{{ reservation.calculate_total_price() }}€</dd>
+                        <dd class="col-sm-9">{{ "%.0f"|format(reservation.calculate_total_price()) }} FCFA</dd>
 
                         <dt class="col-sm-3">Statut</dt>
                         <dd class="col-sm-9">

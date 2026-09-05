@@ -19,7 +19,7 @@
                         <span class="badge {% if reservation.statut == 'en_attente' %}bg-warning{% elif reservation.statut == 'confirmee' %}bg-success{% else %}bg-danger{% endif %}">
                             {{ reservation.statut|title }}
                         </span><br>
-                        <strong>Prix total :</strong> {{ (reservation.date_fin - reservation.date_debut).days * reservation.reservation_vehicle.prix_journalier }}€
+                        <strong>Prix total :</strong> {{ "%.0f"|format((reservation.date_fin - reservation.date_debut).days * reservation.reservation_vehicle.prix_journalier) }} FCFA
                     </p>
                     <div class="d-flex justify-content-between">
                         <a href="{{ url_for('reservations.detail', id=reservation.id) }}" class="btn btn-primary">

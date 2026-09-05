@@ -79,6 +79,8 @@ class VehicleImage(db.Model):
     @property
     def url(self):
         """Retourne l'URL de l'image"""
+        if self.filename and self.filename.startswith(('http://', 'https://')):
+            return self.filename
         return url_for('uploaded_file', filename=self.filename, _external=True)
     
     def to_dict(self):

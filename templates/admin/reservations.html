@@ -42,7 +42,7 @@
                                     <td>{{ reservation.reservation_vehicle.marque }} {{ reservation.reservation_vehicle.modele }}</td>
                                     <td>{{ reservation.date_debut.strftime('%d/%m/%Y') }}</td>
                                     <td>{{ reservation.date_fin.strftime('%d/%m/%Y') }}</td>
-                                    <td>{{ reservation.calculate_total_price() }}€</td>
+                                    <td>{{ "%.0f"|format(reservation.calculate_total_price()) }} FCFA</td>
                                     <td>
                                         <span class="badge {% if reservation.statut == 'confirmee' %}bg-success
                                                           {% elif reservation.statut == 'en_attente' %}bg-warning

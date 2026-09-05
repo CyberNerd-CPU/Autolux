@@ -20,7 +20,7 @@
                         {% for image in vehicle.images %}
                         <div class="carousel-item {% if loop.first %}active{% endif %}">
                             <div class="d-flex justify-content-center align-items-center" style="height: 600px; background-color: #f8f9fa;">
-                                <img src="{{ url_for('uploaded_file', filename=image.filename) }}" 
+                                <img src="{{ image.url }}"
                                      class="d-block" 
                                      alt="{{ vehicle.marque }} {{ vehicle.modele }}" 
                                      style="max-height: 100%; max-width: 100%; object-fit: contain;">
@@ -59,7 +59,7 @@
                     <h5 class="card-title">Caractéristiques</h5>
                     <ul class="list-unstyled">
                         <li><strong>Année:</strong> {{ vehicle.annee }}</li>
-                        <li><strong>Prix journalier:</strong> {{ "%.2f"|format(vehicle.prix_journalier) }}€</li>
+                        <li><strong>Prix journalier:</strong> {{ "%.0f"|format(vehicle.prix_journalier) }} FCFA</li>
                         <li><strong>Statut:</strong> 
                             <span class="badge {% if vehicle.statut == 'disponible' %}bg-success{% elif vehicle.statut == 'reserve' %}bg-warning{% else %}bg-danger{% endif %}">
                                 {{ vehicle.statut|capitalize }}

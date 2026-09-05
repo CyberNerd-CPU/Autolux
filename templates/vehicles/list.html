@@ -54,7 +54,7 @@
         <div class="col">
             <div class="card h-100 shadow-sm">
                 {% if vehicle.images %}
-                <img src="{{ url_for('uploaded_file', filename=vehicle.images[0].filename) }}" class="card-img-top" alt="{{ vehicle.marque }} {{ vehicle.modele }}" style="height: 200px; object-fit: cover;">
+                <img src="{{ vehicle.images[0].url }}" class="card-img-top" alt="{{ vehicle.marque }} {{ vehicle.modele }}" style="height: 200px; object-fit: cover;">
                 {% else %}
                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
                     <i class="fas fa-car fa-3x text-muted"></i>
@@ -65,7 +65,7 @@
                     <p class="card-text text-muted mb-2">Année : {{ vehicle.annee }}</p>
                     <p class="card-text flex-grow-1">{{ vehicle.description|truncate(100) }}</p>
                     <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="h5 mb-0">{{ "%.2f"|format(vehicle.prix_journalier) }}€ / jour</span>
+                        <span class="h5 mb-0">{{ "%.0f"|format(vehicle.prix_journalier) }} FCFA / jour</span>
                         <a href="{{ url_for('vehicles.detail', id=vehicle.id) }}" class="btn btn-primary">
                             <i class="fas fa-info-circle me-2"></i>Détails
                         </a>

@@ -70,7 +70,7 @@
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                 Revenus (30 jours)</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ "%.2f"|format(total_revenue) }} €</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ "%.0f"|format(total_revenue) }} FCFA</div>
                         </div>
                         <div class="col-auto">
                             <i class="fas fa-euro-sign fa-2x text-gray-300"></i>
@@ -149,7 +149,7 @@
                                 <tr>
                                     <td>{{ vehicle.marque }} {{ vehicle.modele }}</td>
                                     <td>{{ vehicle.annee }}</td>
-                                    <td>{{ "%.2f"|format(vehicle.prix_journalier) }} €</td>
+                                    <td>{{ "%.0f"|format(vehicle.prix_journalier) }} FCFA</td>
                                     <td>{{ count }}</td>
                                 </tr>
                                 {% endfor %}

@@ -16,9 +16,9 @@
                         <span class="badge {% if reservation.statut == 'en_attente' %}bg-warning{% elif reservation.statut == 'confirmee' %}bg-success{% else %}bg-danger{% endif %}">
                             {{ reservation.statut|title }}
                         </span><br>
-                        <strong>Prix journalier :</strong> {{ reservation.reservation_vehicle.prix_journalier }}€<br>
+                        <strong>Prix journalier :</strong> {{ "%.0f"|format(reservation.reservation_vehicle.prix_journalier) }} FCFA<br>
                         <strong>Durée :</strong> {{ (reservation.date_fin - reservation.date_debut).days }} jours<br>
-                        <strong>Prix total :</strong> {{ (reservation.date_fin - reservation.date_debut).days * reservation.reservation_vehicle.prix_journalier }}€<br>
+                        <strong>Prix total :</strong> {{ "%.0f"|format((reservation.date_fin - reservation.date_debut).days * reservation.reservation_vehicle.prix_journalier) }} FCFA<br>
                         <strong>Date de création :</strong> {{ reservation.created_at.strftime('%d/%m/%Y %H:%M') }}
                     </p>
                 </div>
