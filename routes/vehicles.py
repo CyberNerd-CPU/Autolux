@@ -82,8 +82,20 @@ vehicle_model = api.model('Vehicle', {
     'description': fields.String(description='Description du véhicule'),
     'prix_journalier': fields.Float(required=True, description='Prix journalier du véhicule'),
     'statut': fields.String(description='Statut du véhicule (disponible, reserve, vendu)'),
-    'images': fields.List(fields.Raw, description='Liste des images du véhicule (objets {id, filename, url} en sortie, URLs en entrée)'),
+    'images': fields.List(fields.Raw, description='Liste des images du véhicule (objets {id, filename, url})'),
     'date_ajout': fields.DateTime(readonly=True)
+})
+
+# Modèle allégé pour la validation des requêtes entrantes (create/update) :
+# contrairement à la sortie, les images y sont fournies comme une simple liste d'URLs.
+vehicle_input_model = api.model('VehicleInput', {
+    'marque': fields.String(required=True, description='Marque du véhicule'),
+    'modele': fields.String(required=True, description='Modèle du véhicule'),
+    'annee': fields.Integer(required=True, description='Année du véhicule'),
+    'description': fields.String(description='Description du véhicule'),
+    'prix_journalier': fields.Float(required=True, description='Prix journalier du véhicule'),
+    'statut': fields.String(description='Statut du véhicule (disponible, reserve, vendu)'),
+    'images': fields.List(fields.String, description='URLs des images du véhicule'),
 })
 
 # Schéma de validation
@@ -181,7 +193,7 @@ class VehicleList(Resource):
             api.abort(500, f"Erreur lors de la récupération des véhicules: {str(e)}")
 
     @api.doc('create_vehicle')
-    @api.expect(vehicle_model)
+    @api.expect(vehicle_input_model)
     @api.marshal_with(vehicle_model, code=201)
     @jwt_required()
     def post(self):
@@ -267,7 +279,7 @@ class VehicleResource(Resource):
             api.abort(404, f"Véhicule non trouvé: {str(e)}")
 
     @api.doc('update_vehicle')
-    @api.expect(vehicle_model)
+    @api.expect(vehicle_input_model)
     @api.marshal_with(vehicle_model)
     @jwt_required()
     def put(self, id):
