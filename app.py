@@ -169,29 +169,39 @@ def create_app(config_class=Config):
         return render_template('errors/500.html'), 500
     
     # Création du dossier uploads s'il n'existe pas
-    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
-    
+    # Sur Vercel, le système de fichiers est en lecture seule (sauf /tmp)
+    try:
+        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    except OSError:
+        app.logger.warning("Impossible de créer UPLOAD_FOLDER (filesystem en lecture seule)")
+
     # Création des tables et mise à jour de la base de données
-    with app.app_context():
-        db.create_all()
-        
-        # Création d'un admin par défaut si aucun n'existe
-        if not User.query.filter_by(role='admin').first():
-            admin = User(
-                nom='Admin',
-                email='admin@luxeauto.com',
-                role='admin'
-            )
-            admin.set_password('admin123')
-            db.session.add(admin)
-            db.session.commit()
-    
+    # Enveloppé pour éviter qu'une base indisponible au cold start ne casse tout l'import du module
+    try:
+        with app.app_context():
+            db.create_all()
+
+            # Création d'un admin par défaut si aucun n'existe
+            if not User.query.filter_by(role='admin').first():
+                admin = User(
+                    nom='Admin',
+                    email='admin@luxeauto.com',
+                    role='admin'
+                )
+                admin.set_password('admin123')
+                db.session.add(admin)
+                db.session.commit()
+    except Exception:
+        app.logger.exception("Initialisation de la base de données impossible au démarrage")
+
     @app.errorhandler(NoAuthorizationError)
     def handle_no_auth_error(e):
         return jsonify({"msg": "Token manquant ou invalide"}), 401
-    
+
     return app
 
+# Instance WSGI au niveau module, requise par le runtime Python de Vercel
+app = create_app()
+
 if __name__ == '__main__':
-    app = create_app()
     app.run(debug=True) 

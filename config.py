@@ -21,7 +21,11 @@ class Config:
     
     # Configuration des uploads
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
+    # Sur Vercel, seul /tmp est accessible en écriture (non persistant entre invocations)
+    if os.environ.get('VERCEL'):
+        UPLOAD_FOLDER = '/tmp/uploads'
+    else:
+        UPLOAD_FOLDER = os.path.join(BASE_DIR, 'static', 'uploads')
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'jfif'}
     ALLOWED_MIMETYPES = {'image/png', 'image/jpeg', 'image/gif', 'image/jfif'}
